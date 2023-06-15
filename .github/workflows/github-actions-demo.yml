@@ -1,0 +1,22 @@
+name: GitHub Actions Demo
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+    - ".github"
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '15 6 * * SUN'
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    name: deploy to staging
+    steps:
+      - run: |
+            echo "🎉 The job was triggered by event: ${{ github.event_name }}"
+            echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ."
+      - run: tree
