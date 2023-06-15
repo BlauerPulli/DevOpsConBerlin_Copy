@@ -8,3 +8,11 @@ on:
         type: string
         required: true
         default: World
+
+jobs:
+  Reusable-Job:
+    runs-on: ubuntu-latest
+    name: reusable-job
+    steps:
+      - run: echo "Hello ${{ inputs.who-to-greet }}"
+        name: echo
