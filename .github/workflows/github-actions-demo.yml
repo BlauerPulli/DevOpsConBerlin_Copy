@@ -10,14 +10,44 @@ on:
   schedule:
     - cron: '15 6 * * SUN'
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run against'
+        type: environment
+        required: true
 
 jobs:
   Build:
     runs-on: ubuntu-latest
-    name: deploy to staging
+    name: build
     steps:
       - run: |
             echo "🎉 The job was triggered by event: ${{ github.event_name }}"
             echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ."
       - uses: actions/checkout@v3.3.0
       - run: tree
+  Test:
+    runs-on: ubuntu-latest
+    name: test
+    if: ${{ inputs.environment == 'Test' && github.event_name == 'workflow_dispatch' }}
+    steps:
+      - run: |
+            echo "Testing..."
+    needs: [Build]
+  Load-Test:
+    runs-on: ubuntu-latest
+    name: load-test
+    if: ${{ inputs.environment == 'Load-Test' && github.event_name == 'workflow_dispatch' }}
+    steps:
+      - run: |
+            echo "Testing..."
+            sleep 15
+    needs: [Build]
+  Production:
+    runs-on: ubuntu-latest
+    name: production
+    if: ${{ inputs.environment == 'Production' && github.event_name == 'workflow_dispatch' }}
+    steps:
+      - run: |
+            echo "Deploying..."
+    needs: [Test, Load-Test]
