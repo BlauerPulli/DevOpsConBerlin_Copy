@@ -5,6 +5,11 @@ on:
     branches: [main]
     paths: hello-world-docker-action/*
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run against'
+        type: environment
+        required: true
     
 jobs:
   test-action:
